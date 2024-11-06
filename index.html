@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown to Plain Text Converter | Free Online Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <meta name="description" content="Convert markdown text to plain text with ease. Paste your markdown and get a plain text version, preserving list formatting and removing unnecessary symbols. Perfect for quick copy-pasting into other programs.">
+    <meta name="keywords" content="markdown to plain text, markdown converter, plain text generator, online markdown tool, text converter, paste markdown, copy plain text">
+    <meta name="author" content="Marcel Klein">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Markdown to Plain Text Converter | Free Online Tool">
+    <meta property="og:description" content="Easily convert markdown text to plain text and copy it to your clipboard. This online tool preserves list formatting and removes markdown symbols.">
+    <meta property="og:url" content="https://markdowntotext.com">
+    <link rel="canonical" href="https://markdowntotext.com">>
+    <meta name="robots" content="index, follow">
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        textarea {
+            width: 48%;
+            height: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 14px;
+        }
+        #output {
+            white-space: pre-wrap;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script defer data-domain="markdowntotext.com" src="https://plausible.io/js/script.js"></script>
+</head>
+<body>
+    <div class="toolbar">
+        <button id="clear">Clear</button>
+        <button id="copy">Copy to Clipboard</button>
+    </div>
+    <div class="container">
+        <textarea id="markdownInput" placeholder="Paste your markdown text here..."></textarea>
+        <div id="output"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#markdownInput').on('input', function() {
+                let markdownText = $(this).val();
+                // Preserve bullet points and simple list formatting, remove ** for bold text
+                let plainText = markdownText
+                    .replace(/(\n)?(^|\n)(\s*[-*+])\s+/gm, '$1$3 ') // Preserve list markers at the start of lines
+                    .replace(/(\*\*|__)(.*?)\1/g, '$2') // Remove ** or __ surrounding bold text, keep the text inside
+                    .replace(/[#`~_]/g, '') // Remove other markdown symbols
+                    .replace(/\[(.*?)\]\(.*?\)/g, '$1'); // Remove markdown links, keep text
+
+                $('#output').text(plainText);
+            });
+
+            $('#clear').click(function() {
+                $('#markdownInput').val('');
+                $('#output').text('');
+            });
+
+            $('#copy').click(function() {
+                navigator.clipboard.writeText($('#output').text()).then(() => {
+                    alert('Copied to clipboard!');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
